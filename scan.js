@@ -128,7 +128,7 @@
 							  return i;
 						  }
 				  }
-			  return -1;
+			  return -100;
 		  }
           
           
@@ -145,9 +145,7 @@
                               hullPath.pop();
                           }
                       hullPath.push(points[i]);
-                  }
-              
-              console.log("Size: " + hullPath.length);
+                  }              
           }
 		  
 		 
