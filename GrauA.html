@@ -73,13 +73,14 @@
 			  
 		  }
           
-          var StarNodes = [];
-          var openlist = [];
-          var closetlist =[];
+          
           
           function findPath(startnode, endnode)
           {              
               var path = [];
+              var StarNodes = [];
+              var openlist = [];
+              var closetlist =[];
               
               if(startnode.x == endnode.x && startnode.y == endnode.y)
                   {
@@ -90,7 +91,7 @@
               
               for(i = 0; i < nodes.length; i++){
 		          var sn = {x:nodes[i].x , y: nodes[i].y, edgelist:nodes[i].edgelist, edgeindexlist:nodes[i].edgeindexlist, h:getDistance(nodes[i],endnode), g:0, f:0, parentindex: -2};
-                  StarNodes.push(sn);			  
+                  StarNodes.push(sn);
 		      }
               
               
