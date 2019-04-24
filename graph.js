@@ -48,12 +48,12 @@
               
               
               
-              for(var i= 0;i < points.length;i++)
+              for(var i= 0;i < nodes.length;i++)
                   {
                       var menorDistancia = Infinity;                      
-                      for(var j= 0;j < hullPath.length;j++)
+                      for(var j= i+1;j < nodes.length;j++)
                           {
-                              var tempdist = getDistance(points[i],hullPath[j]);
+                              var tempdist = getDistance(nodes[i],nodes[j]);
                               if(tempdist < menorDistancia)
                                   {
                                       menorDistancia = tempdist;                                      
@@ -71,35 +71,7 @@
               //console.log("Insidepoint: x: " + points[ipoint].x + " y: " + points[ipoint].y);
               
               //creates aditional edges
-              //points to hull
-              
-              //for(var i= 0;i < points.length;i++)
-              //    {     
-              //        var closesthullpoint;
-              //        var chpdistance = Infinity;
-              //        for(var j= 0;j < hullPath.length;j++)
-              //            {                              
-              //                var tempdist = getDistance(points[i],hullPath[j]);
-              //                if(tempdist <= maiorMenorDistancia)
-              //                    {
-              //                       if(tempdist < chpdistance)
-              //                           {
-              //                               chpdistance = tempdist;
-              //                               closesthullpoint = j;
-              //                           }
-              //                        
-              //                    }
-              //            }
-              //        var edge = {index1:closesthullpoint, index2:i + hullPath.length, cost: chpdistance};         
-              //        edgeList.push(edge);
-              //        
-              //        nodes[closesthullpoint].edgelist.push(edge);
-              //        nodes[closesthullpoint].edgeindexlist.push(edgeList.length - 1);
-              //        nodes[i+hullPath.length].edgelist.push(edge);
-              //        nodes[i+hullPath.length].edgeindexlist.push(edgeList.length - 1);      
-              //                     
-              //    }
-              
+             
               //one new edge per point for all points(none if no close point remains)
               for(var i= 0;i < nodes.length;i++)
                   {     

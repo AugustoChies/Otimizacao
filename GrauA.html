@@ -47,7 +47,8 @@
 		  	  ctx.arc(points[i].x*10 + 100, 200 - (points[i].y*10 + 100), pointSize, 0, Math.PI * 2, true); // Draw a point using the arc function of the canvas with a point structure.
 			  ctx.fill();
 			  
-		  }
+		  }          
+          
           
           
           var hullPath = gethull(points);         
@@ -55,13 +56,15 @@
           
           CreateGraph(points,hullPath);
           
-            for(i = 0; i < edgeList.length; i++){
-	           ctx.moveTo(nodes[edgeList[i].index1].x*10 + 100, 200 - (nodes[edgeList[i].index1].y*10 + 100));
-               ctx.lineTo(nodes[edgeList[i].index2].x*10 + 100,200 - (nodes[edgeList[i].index2].y*10 +100));
-	       	   ctx.stroke(); 			  
-	           }  
+          for(i = 0; i < edgeList.length; i++){
+	         ctx.moveTo(nodes[edgeList[i].index1].x*10 + 100, 200 - (nodes[edgeList[i].index1].y*10 + 100));
+             ctx.lineTo(nodes[edgeList[i].index2].x*10 + 100,200 - (nodes[edgeList[i].index2].y*10 +100));
+	         ctx.stroke(); 			  
+	         }  
+          
+          
 	       
-          megaDebug();
+          //megaDebug();
           
           var foundpath = findPath(nodes[0],nodes[Math.floor(hullPath.length/2)]);
           
@@ -73,6 +76,42 @@
 			  ctx.fill();
 			  
 		  }
+          ctx.strokeStyle = "#FFFF00";
+          
+          for(i = 0; i < foundpath.length - 1; i++){              
+		      ctx.moveTo(foundpath[i].x*10 + 100, 200 - (foundpath[i].y*10 + 100));
+              ctx.lineTo(foundpath[i + 1].x*10 + 100, 200 - (foundpath[i + 1].y*10 + 100));
+              ctx.stroke(); 	
+			  
+		  }
+          
+          
+          function addPoint(mousex,mousey,points)
+          {
+              var point = {x: mousex , y: mousey};
+              different = true;
+              for(j= 0; j < points.length;j++)
+              {
+                  if(point.x == points[j].x  && point.y == points[j].y)
+                  {
+                      different = false;
+                      break;
+                  }
+              }
+              
+              if(different)
+                  {
+                      points.push(point);
+                      var pointSize = 3; // Change according to the size of the point.
+                      ctx.fillStyle = "#000000";
+                      ctx.beginPath(); //Start path
+                      ctx.arc(point.x*10 + 100, 200 - (point.y*10 + 100), pointSize, 0, Math.PI * 2, true); // Draw a point using the arc function of the canvas with a point structure.
+                      ctx.fill();
+                  }
+              
+          }
+          
+          
           
           
           
