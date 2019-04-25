@@ -56,11 +56,7 @@
               while(path[path.length - 1].parentindex != -2)
                   {
                        path.push(StarNodes[path[path.length - 1].parentindex]);
-                  }
-              for(i = 0; i < path.length; i++){
-                 console.log("Node " + i + ": X: " + path[i].x + " Y: " +path[i].y);
-                 console.log("Parent: " + path[i].parentindex);  
-              }         
+                  }             
               
               return path;
           }

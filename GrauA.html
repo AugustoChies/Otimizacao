@@ -8,83 +8,42 @@
 	  
 	   
 	   <canvas id="hullcanvas" width="200" height="200" style="border:1px solid #000000;"></canvas>
-      
+       <button type="button" id="GraphBtn" onclick="process(points)">Gen Graph</button>
+       <button type="button" id="ClearBtn" onclick="clean()">Clear</button>
+       <input id="beg">
+       <input id="end">
+       <button type="button" id="PathBtn" onclick="trace()">Trace</button>
+       
+
       
        <script src="scan.js"></script>
        <script src="graph.js"></script>
        <script src="astar.js"></script>
       
-      <script>
-          var points = [];
-		  
-		  for (i = 0; i < 20; i++) { 
-			  var different = true;
-			  do{
-	      	  var point = {x: Math.floor((Math.random() * 20) - 10) , y: Math.floor((Math.random() * 20) - 10)};
-				  different = true;
-				  for(j= 0; j < i;j++)
-					  {
-						  if(point.x == points[j].x  && point.y == points[j].y)
-							  {
-								  different = false;
-								  break;
-							  }
-					  }
-			  }while(!different)
-		      points.push(point);
-		  }
+      <script>          
+          var points = [0];  
+          var firstpoint = true;
+          var building = true;
+          var canvas = document.getElementById("hullcanvas");
+          var ctx = canvas.getContext("2d"); 
+          canvas.addEventListener("mousedown",click,false);
+          
+          var Pbut = document.getElementById("PathBtn");
+          Pbut.disabled = true;
+         
 		  
 		  
-		    
-   		  var ctx = document.getElementById("hullcanvas").getContext("2d"); 
-		 
-		  
-
-		  for(i = 0; i < points.length; i++){
-		      var pointSize = 3; // Change according to the size of the point.
-		  	  ctx.fillStyle = "#000000";
-		  	  ctx.beginPath(); //Start path
-		  	  ctx.arc(points[i].x*10 + 100, 200 - (points[i].y*10 + 100), pointSize, 0, Math.PI * 2, true); // Draw a point using the arc function of the canvas with a point structure.
-			  ctx.fill();
-			  
-		  }          
-          
-          
-          
-          var hullPath = gethull(points);         
-          
-          
-          CreateGraph(points,hullPath);
-          
-          for(i = 0; i < edgeList.length; i++){
-	         ctx.moveTo(nodes[edgeList[i].index1].x*10 + 100, 200 - (nodes[edgeList[i].index1].y*10 + 100));
-             ctx.lineTo(nodes[edgeList[i].index2].x*10 + 100,200 - (nodes[edgeList[i].index2].y*10 +100));
-	         ctx.stroke(); 			  
-	         }  
-          
-          
-	       
-          //megaDebug();
-          
-          var foundpath = findPath(nodes[0],nodes[Math.floor(hullPath.length/2)]);
-          
-          for(i = 0; i < foundpath.length; i++){
-		      var pointSize = 3; // Change according to the size of the point.
-		  	  ctx.fillStyle = "#FFFF00";
-		  	  ctx.beginPath(); //Start path
-		  	  ctx.arc(foundpath[i].x*10 + 100, 200 - (foundpath[i].y*10 + 100), pointSize, 0, Math.PI * 2, true); // Draw a point using the arc function of the canvas with a point structure.
-			  ctx.fill();
-			  
-		  }
-          ctx.strokeStyle = "#FFFF00";
-          
-          for(i = 0; i < foundpath.length - 1; i++){              
-		      ctx.moveTo(foundpath[i].x*10 + 100, 200 - (foundpath[i].y*10 + 100));
-              ctx.lineTo(foundpath[i + 1].x*10 + 100, 200 - (foundpath[i + 1].y*10 + 100));
-              ctx.stroke(); 	
-			  
-		  }
-          
+          function click(event)
+          {
+              if(building)
+                  {
+                      var mx = (event.pageX -100)/10 - 1;
+                      var my = -1 * ((event.pageY -100)/10) + 1;                    
+                      
+                      addPoint(mx,my,points);
+                      
+                  }
+          }
           
           function addPoint(mousex,mousey,points)
           {
@@ -101,7 +60,16 @@
               
               if(different)
                   {
-                      points.push(point);
+                      console.log("dif");
+                      if(firstpoint)
+                          {
+                              points[0] = point;
+                              firstpoint = false;
+                          }
+                      else
+                          {
+                              points.push(point);
+                          }
                       var pointSize = 3; // Change according to the size of the point.
                       ctx.fillStyle = "#000000";
                       ctx.beginPath(); //Start path
@@ -109,6 +77,116 @@
                       ctx.fill();
                   }
               
+          }
+          
+          function addd20RandPoints(points)
+          {
+              for (i = 0; i < 20; i++) { 
+	       		  var different = true;
+	       		  do{
+	             	  var point = {x: Math.floor((Math.random() * 20) - 10) , y: Math.floor((Math.random() * 20) - 10)};
+	       			  different = true;
+	       			  for(j= 0; j < i;j++)
+	       				  {
+	       					  if(point.x == points[j].x  && point.y == points[j].y)
+	       						  {
+	       							  different = false;
+	       							  break;
+	       						  }
+	       				  }
+	       		  }while(!different)
+	       	      points.push(point);
+	       	  }      	
+          }
+          
+          
+          function process(points)
+          {                     
+                //addd20RandPoints(points);
+                var hullPath = gethull(points);                           
+                
+                CreateGraph(points,hullPath);
+              
+                drawGraph(ctx,nodes,edgeList,3);
+	            
+                //megaDebug();              
+                
+                
+                var but = document.getElementById("GraphBtn");
+                but.disabled = true;
+                Pbut.disabled = false;
+              
+                building = false;
+          
+          }
+          
+          function trace()
+          {
+              var beg = Math.floor(document.getElementById("beg").value);
+              var end = Math.floor(document.getElementById("end").value);
+              
+              if (isNaN(beg) || beg < 0 || beg > nodes.length - 1) {
+                  alert("Beginning index not found!");
+              }
+              
+              if (isNaN(beg) || end < 0 || end > nodes.length - 1) {
+                  alert("End index not found!");
+              }
+
+              ctx.clearRect(0, 0, canvas.width, canvas.height);
+              drawGraph(ctx,nodes,edgeList,3);
+              var foundpath = findPath(nodes[beg],nodes[end]);
+              drawPath(ctx,foundpath,3);
+          }
+          
+          function clean()
+          {
+              points=[];
+              nodes=[];
+              edgeList=[];
+              ctx.clearRect(0, 0, canvas.width, canvas.height);
+              var but = document.getElementById("GraphBtn");
+              but.disabled = false;
+              Pbut.disabled = true;
+              building = true;
+          }
+          
+          function drawGraph(ctx,points,edgeList,pointSize)
+          {              
+	       	  ctx.fillStyle = "#000000";
+              ctx.strokeStyle = "#000000";
+              
+              for(i = 0; i < points.length; i++){	       	      
+	       	  	  ctx.beginPath(); //Start path
+	       	  	  ctx.arc(points[i].x*10 + 100, 200 - (points[i].y*10 + 100), pointSize, 0, Math.PI * 2, true);
+	       		  ctx.fill();	       		  
+	       	  }          
+              
+              for(i = 0; i < edgeList.length; i++){
+	                ctx.moveTo(nodes[edgeList[i].index1].x*10 + 100, 200 - (nodes[edgeList[i].index1].y*10 + 100));
+                    ctx.lineTo(nodes[edgeList[i].index2].x*10 + 100,200 - (nodes[edgeList[i].index2].y*10 +100));
+	                ctx.stroke(); 			  
+	           }  
+              
+          }
+          
+          function drawPath(ctx,foundpath,pointSize)
+          {             
+	          ctx.fillStyle = "#FFFF00";
+              ctx.strokeStyle = "#FFFF00";
+              for(i = 0; i < foundpath.length; i++){
+	         	      
+	         	      ctx.beginPath(); //Start path
+	         	      ctx.arc(foundpath[i].x*10 + 100, 200 - (foundpath[i].y*10 + 100), pointSize, 0, Math.PI * 2, true);
+	         	      ctx.fill();
+	         		  
+	         	  }
+                     
+               for(i = 0; i < foundpath.length - 1; i++){              
+	         	      ctx.moveTo(foundpath[i].x*10 + 100, 200 - (foundpath[i].y*10 + 100));
+                      ctx.lineTo(foundpath[i + 1].x*10 + 100, 200 - (foundpath[i + 1].y*10 + 100));
+                      ctx.stroke();	         		  
+	         	  }
           }
           
           

@@ -42,7 +42,7 @@
               var maiorMenorDistancia = 0;
               
               
-              console.log(nodes.length);
+              
               for(var i= 0;i < nodes.length;i++)
                   {
                       var menorDistancia = Infinity;                      
@@ -70,7 +70,7 @@
                               var tempdist = getDistance(nodes[i],nodes[j]);							 
                               if(tempdist <= maiorMenorDistancia)
                                   {									  
-                     	              var edge = {index1:j, index2:i, cost: 									getDistance(nodes[i],nodes[j])};         
+                     	              var edge = {index1:j, index2:i, cost:getDistance(nodes[i],nodes[j])};         
 									  edgeList.push(edge);
                      	        			
 									  nodes[j].edgelist.push(edge);
