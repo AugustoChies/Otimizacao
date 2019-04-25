@@ -15,7 +15,7 @@
        <script src="astar.js"></script>
       
       <script>
-          var points = [20];
+          var points = [];
 		  
 		  for (i = 0; i < 20; i++) { 
 			  var different = true;
@@ -31,7 +31,7 @@
 							  }
 					  }
 			  }while(!different)
-		      points[i] = point;
+		      points.push(point);
 		  }
 		  
 		  
