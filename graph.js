@@ -62,21 +62,24 @@
                   }
               
               //creates aditional edges
-               //new edge for everyy point within distance
+               //new edge for every point within distance
 			   for(var i= 0;i < nodes.length;i++)
                   {                      
                       for(var j= i+1;j < nodes.length;j++)
                           {
                               var tempdist = getDistance(nodes[i],nodes[j]);							 
                               if(tempdist <= maiorMenorDistancia)
-                                  {									  
-                     	              var edge = {index1:j, index2:i, cost:getDistance(nodes[i],nodes[j])};         
-									  edgeList.push(edge);
-                     	        			
-									  nodes[j].edgelist.push(edge);
-                     	        	  nodes[j].edgeindexlist.push(edgeList.length - 1);
-                     	        	  nodes[i].edgelist.push(edge);
-                     	       		  nodes[i].edgeindexlist.push(edgeList.length - 1);                                     
+                                  {		
+									  if(!(i < hullPath.length && j < hullPath.length && i - j == -1))//not recreate hull
+										  {
+                     	             			 var edge = {index1:j, index2:i, cost:getDistance(nodes[i],nodes[j])};         
+									 			 edgeList.push(edge);
+                     	        						
+									 			 nodes[j].edgelist.push(edge);
+                     	        	 			 nodes[j].edgeindexlist.push(edgeList.length - 1);
+                     	        	 			 nodes[i].edgelist.push(edge);
+                     	       		 			 nodes[i].edgeindexlist.push(edgeList.length - 1);
+										  }
                                   }
                           }           
                   }
